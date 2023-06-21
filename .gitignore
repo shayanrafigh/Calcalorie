@@ -1,0 +1,12 @@
+packages.md
+venv
+.env
+.pytest_cache
+**__pyhache__/
+db.sqlite3
+.coverage
+.vscode
+calcalorie/__pycache__
+calcalorie/settings/__pycache__
+
+
