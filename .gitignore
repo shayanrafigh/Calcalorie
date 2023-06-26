@@ -6,7 +6,11 @@ venv
 db.sqlite3
 .coverage
 .vscode
-calcalorie/__pycache__
+calcalorie/**/__pycache__
+food_calorie/**/__pycache__
 calcalorie/settings/__pycache__
+schema.yml
+__pycache__
+
 
 

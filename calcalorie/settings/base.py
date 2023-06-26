@@ -18,9 +18,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # external packages
+    # External packages
     'rest_framework',
-    # internal apps
+    'drf_spectacular',
+    # Internal apps
+    'food_calorie',
 ]
 
 MIDDLEWARE = [
@@ -101,4 +103,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK={}
+REST_FRAMEWORK={
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'CalCalorie',
+    'DESCRIPTION': 'Calorie calculator',
+}
