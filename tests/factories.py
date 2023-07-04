@@ -1,18 +1,11 @@
 import factory
-from food_calorie.models import Food,Mineral,Vitamin
+from food_calorie.models import Food,Nutrient
 
-class VitaminFactory(factory.django.DjangoModelFactory):
+class NutrientFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model=Vitamin
+        model=Nutrient
     
     name='test'
-
-class MineralFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model=Mineral
-    
-    name='test'
-
 
 class FoodFactory(factory.django.DjangoModelFactory):
     class Meta:

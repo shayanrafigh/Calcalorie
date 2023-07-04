@@ -2,9 +2,16 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
-from .models import Food, Vitamin, Mineral
-from .serializers import FoodSerializer,FoodDetailedSerializer,VitaminSerializer,MineralSerializer
+from rest_framework.decorators import action
+from django.db.models import Prefetch
 
+
+
+
+from .models import Food, Nutrient, FoodNutrient,Card, FoodCard
+
+from .serializers import NutrientSerializer,FoodNutrientSerializer,FoodSerializer,FoodDetailedSerializer \
+,CardSerializer,FoodCardSerializer
 class FoodView(viewsets.ViewSet):
     queryset=Food.objects.all()
     @extend_schema(responses=FoodSerializer)
@@ -12,25 +19,50 @@ class FoodView(viewsets.ViewSet):
         serializer=FoodSerializer(self.queryset,many=True)
         return Response(serializer.data)
 
-class VitaminView(viewsets.ViewSet):
-    queryset=Vitamin.objects.all()
-    @extend_schema(responses=VitaminSerializer)
-    def list(self,request):
-        serializer=VitaminSerializer(self.queryset,many=True)
+class NutrientView(viewsets.ViewSet):
+    queryset=Nutrient.objects.all()
+
+    
+    def retrieve(self ,request, pk=None):
+        serializer=NutrientSerializer(self.queryset.filter(id=pk),many=True)
         return Response(serializer.data)
 
-class MineralView(viewsets.ViewSet):
-    queryset=Mineral.objects.all()
-    @extend_schema(responses=MineralSerializer)
+    @extend_schema(responses=NutrientSerializer)
     def list(self,request):
-        serializer=MineralSerializer(self.queryset,many=True)
+        serializer=NutrientSerializer(self.queryset,many=True)
         return Response(serializer.data)
 
 class FoodDetailView(viewsets.ViewSet):
+   
     queryset=Food.objects.all()
+    
+    def retrieve(self ,request, pk=None):
+        if pk.isdigit():
+            serializer=FoodDetailedSerializer(self.queryset.filter(id=pk),many=True)
+        else:
+            serializer=FoodDetailedSerializer(self.queryset.filter(slug=pk),many=True)
+        
+        
+    
+        return Response(serializer.data)
+    
+    
     @extend_schema(responses=FoodDetailedSerializer)
     def list(self,request):
         serializer=FoodDetailedSerializer(self.queryset,many=True)
         return Response(serializer.data)
+
+
+class CardView(viewsets.ViewSet):
+   
+    queryset=Card.objects.all()
+    
+    def retrieve(self ,request, pk=None):
+
+        serializer=CardSerializer(self.queryset.filter(id=pk),many=True)
+        
+        
+        return Response(serializer.data)
+
 
 

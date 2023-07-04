@@ -6,10 +6,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from food_calorie import views
 
 router= DefaultRouter()
-router.register(r'food', views.FoodView, basename="food")
-router.register(r'food/detail', views.FoodDetailView, basename="food-detail")
-router.register(r'vitamin', views.VitaminView, basename="vitamin")
-router.register(r'mineral', views.MineralView, basename="mineral")
+#router.register(r'food/detail', views.FoodDetailView, basename="food-detail")
+router.register(r'card', views.CardView, basename="card")
+router.register(r'nutrient', views.NutrientView, basename="nutrient")
+router.register(r'food', views.FoodDetailView, basename="food")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),

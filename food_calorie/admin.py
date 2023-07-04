@@ -1,13 +1,21 @@
 from django.contrib import admin
 
-from .models import Food,Mineral,Vitamin,FoodVitamin,FoodMineral
+from .models import Food, Nutrient, FoodNutrient , Card,FoodCard
 
-admin.site.register(Food)
+class FoodNutrientInline(admin.TabularInline):
+    model=FoodNutrient
 
-admin.site.register(Mineral)
+class FoodCardInline(admin.TabularInline):
+    model=FoodCard
+    
+@admin.register(Food)
+class FoodAdmin(admin.ModelAdmin):
+    inlines=[FoodNutrientInline]
 
-admin.site.register(Vitamin)
+@admin.register(Card)
+class CardAdmin(admin.ModelAdmin):
+    inlines=[FoodCardInline]
 
-admin.site.register(FoodVitamin)
-
-admin.site.register(FoodMineral)
+admin.site.register(Nutrient)
+admin.site.register(FoodNutrient)
+admin.site.register(FoodCard)

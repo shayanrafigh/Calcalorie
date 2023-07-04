@@ -11,6 +11,7 @@ food_calorie/**/__pycache__
 calcalorie/settings/__pycache__
 schema.yml
 __pycache__
+migrations
 
 
 

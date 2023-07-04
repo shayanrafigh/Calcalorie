@@ -1,10 +1,8 @@
 from pytest_factoryboy import register
 
-from .factories import VitaminFactory, MineralFactory, FoodFactory
+from .factories import NutrientFactory, FoodFactory
 
-register(VitaminFactory)
-
-register(MineralFactory)
+register(NutrientFactory)
 
 register(FoodFactory)
 
