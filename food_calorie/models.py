@@ -1,7 +1,10 @@
 from django.db import models
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from django.core.validators import MinValueValidator
 import json
+from decimal import Decimal
+
 
 
 class Nutrient(models.Model):
@@ -10,7 +13,7 @@ class Nutrient(models.Model):
     ("Mineral", "mineral"),
     ("Others", "others"),
     ]
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, unique=True)
     groups = models.CharField(
         max_length=10,
         choices=TYPE,
@@ -31,14 +34,14 @@ class Nutrient(models.Model):
 
 
 class Food(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=300 ,default='slug')
     serving = models.CharField(max_length=200)
-    calories = models.PositiveIntegerField()
-    protein  = models.DecimalField(max_digits=10, decimal_places=3,default=0)
-    carbohydrate  = models.DecimalField(max_digits=10, decimal_places=3,default=0)
-    fat = models.DecimalField(max_digits=10, decimal_places=3,default=0)
-    nutrients =models.ManyToManyField(Nutrient, through="FoodNutrient",related_name="foods"
+    calories = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    protein  = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    carbohydrate  = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    fat = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    nutrients =models.ManyToManyField(Nutrient, through="FoodNutrient",related_name="foods",blank=True
 )
     
 
@@ -62,18 +65,23 @@ class Food(models.Model):
 class FoodNutrient(models.Model):
     food = models.ForeignKey(Food, on_delete=models.CASCADE,related_name="food_nutrient")
     nutrient = models.ForeignKey(Nutrient, on_delete=models.CASCADE,related_name="food_nutrient")
-    value = models.DecimalField(max_digits=12, decimal_places=3)
+    value =  models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    
+    class Meta:
+        unique_together=('food','nutrient')
 
 class Card(models.Model):
-    name = models.CharField(max_length=100)
-    foods = models.ManyToManyField(Food, through="FoodCard",related_name="cards")
-    total_calories = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_proteins = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_carbohydrates = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_fats = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    name = models.CharField(max_length=100, unique=True)
+    foods = models.ManyToManyField(Food, through="FoodCard",related_name="cards",blank=True)
+    total_calories = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    total_proteins = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    total_carbohydrates = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
+    total_fats = models.DecimalField(max_digits=12, decimal_places=4,default=0,validators=[MinValueValidator(0)])
     def nutrients_default():
         return {}
     nutrients = models.JSONField(default=nutrients_default,blank=True)
+    
+    
     
     
     def __str__(self):
@@ -86,6 +94,10 @@ class FoodCard(models.Model):
     food = models.ForeignKey(Food, on_delete=models.CASCADE,related_name="food_card")
     card = models.ForeignKey(Card, on_delete=models.CASCADE,related_name="food_card")
     quantity = models.PositiveIntegerField(default=1)
+    
+    
+    class Meta:
+        unique_together=('food','card')
     
     
     

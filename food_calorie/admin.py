@@ -16,6 +16,10 @@ class FoodAdmin(admin.ModelAdmin):
 class CardAdmin(admin.ModelAdmin):
     inlines=[FoodCardInline]
 
-admin.site.register(Nutrient)
+class NutrientAdmin(admin.ModelAdmin):
+    list_display = ('name', 'groups')
+    
+admin.site.register(Nutrient,NutrientAdmin)
 admin.site.register(FoodNutrient)
 admin.site.register(FoodCard)
+
